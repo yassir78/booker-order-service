@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fstg.bookerorderservice.bean.CustomerOrder;
 import com.fstg.bookerorderservice.service.facade.CustomerOrderService;
+import com.fstg.bookerorderservice.service.required.ProductServiceRequired;
 
 @RequestMapping("/booker-order")
 @RestController
@@ -21,11 +22,11 @@ public class OrderRest {
 
 	@Autowired
 	private CustomerOrderService customerOrderService;
+	@Autowired
+	private ProductServiceRequired productServiceRequired;
 
 	@PostMapping
 	public Optional<CustomerOrder> save(@RequestBody CustomerOrder order) {
-		System.out.println("*************************");
-		System.out.println(order.getBuyerRef());
 		return customerOrderService.save(order);
 	}
 

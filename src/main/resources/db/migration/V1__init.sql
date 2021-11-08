@@ -108,6 +108,27 @@ ALTER TABLE `order_item`
 ALTER TABLE `order_status`
   ADD PRIMARY KEY (`id`);
 COMMIT;
+INSERT INTO `customer_order` (`id`, `buyer_ref`, `order_amount`, `order_date`, `ref`, `seller_ref`, `ship_to_address`, `ship_to_date`, `status_id`) VALUES
+(2, 'buyerRef1', '1990.00', '2022-09-22', 'ref1', 'sellerRef1', 'ship to address 1', '2022-10-22', 1),
+(5, 'buyerRef2', '1990.00', '2022-09-23', 'ref2', 'sellerRef2', 'ship to address 2', '2022-10-24', 4);
+--
+-- Déchargement des données de la table `order_item`
+--
+
+INSERT INTO `order_item` (`id`, `product_ref`, `quantity`, `total`, `related_customer_order_id`) VALUES
+(3, 1, 5, '44.00', 2),
+(6, 2, 5, '54.00', 5);
+
+-- --------------------------------------------------------
+
+
+--
+-- Déchargement des données de la table `order_status`
+--
+
+INSERT INTO `order_status` (`id`, `status`) VALUES
+(1, 'new'),
+(4, 'packed');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
