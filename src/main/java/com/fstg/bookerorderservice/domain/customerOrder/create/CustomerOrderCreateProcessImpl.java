@@ -4,6 +4,7 @@ import com.fstg.bookerorderservice.domain.core.AbstractProcessImpl;
 import com.fstg.bookerorderservice.domain.core.Result;
 import com.fstg.bookerorderservice.domain.pojo.CustomerOrder;
 import com.fstg.bookerorderservice.domain.pojo.OrderItem;
+import com.fstg.bookerorderservice.domain.pojo.Payment;
 import com.fstg.bookerorderservice.infra.facade.CustomerOrderInfra;
 
 import java.time.LocalDate;
@@ -40,8 +41,18 @@ public class CustomerOrderCreateProcessImpl extends AbstractProcessImpl<Customer
     public void run(CustomerOrderCreateInput abstractProcessInput, Result result) {
         CustomerOrder customerOrder = abstractProcessInput.getCustomerOrder();
         int status = customerOrderInfra.save(customerOrder);
+        
         result.addInfoMessage("The Order has been saved " + status);
+        
         logger.info("Order saved successfully");
+        
+        //Payment Process
+        
+        customerOrderInfra.pay(new Payment(null,"#ORDR563", customerOrder.getOrderAmount().doubleValue(), customerOrder.getRef()));
+        
+        
+        
+        
     }
 
     public CustomerOrderCreateProcessImpl(CustomerOrderInfra customerOrderInfra) {

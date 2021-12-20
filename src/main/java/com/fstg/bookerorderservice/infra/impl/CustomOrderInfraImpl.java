@@ -1,13 +1,16 @@
 package com.fstg.bookerorderservice.infra.impl;
 
 import com.fstg.bookerorderservice.domain.pojo.CustomerOrder;
+import com.fstg.bookerorderservice.domain.pojo.Payment;
 import com.fstg.bookerorderservice.infra.core.AbstractInfraImpl;
 import com.fstg.bookerorderservice.infra.dao.CustomerOrderRepository;
 import com.fstg.bookerorderservice.infra.dao.OrderItemRepository;
 import com.fstg.bookerorderservice.infra.dao.OrderStatusRepository;
+import com.fstg.bookerorderservice.infra.dto.PaymentDto;
 import com.fstg.bookerorderservice.infra.entity.CustomerOrderEntity;
 import com.fstg.bookerorderservice.infra.facade.CustomerOrderInfra;
 import com.fstg.bookerorderservice.infra.mappers.CustomerOrderMapper;
+import com.fstg.bookerorderservice.infra.proxy.PaymentProxy;
 import com.fstg.bookerorderservice.infra.proxy.ProductProxy;
 import com.fstg.bookerorderservice.infra.proxy.UserProxy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,9 @@ public class CustomOrderInfraImpl extends AbstractInfraImpl implements CustomerO
     private UserProxy userProxy;
     @Autowired
     private ProductProxy productProxy;
+    
+    @Autowired
+    private PaymentProxy paymentProxy;
 
     @Override
     public CustomerOrder findByReference(String reference) {
@@ -64,6 +70,12 @@ public class CustomOrderInfraImpl extends AbstractInfraImpl implements CustomerO
     public boolean productExistsByRef(String ref) {
         return productProxy.existByRef(ref);
     }
+
+	@Override
+	public int pay(Payment payment) {
+		 paymentProxy.pay( new PaymentDto(payment.getId(), payment.getReference(), payment.getAmount(), payment.getOrderReference()));
+		 return 1;
+	}
 
 
 }
