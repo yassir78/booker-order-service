@@ -14,10 +14,4 @@ public class BookerOrderServiceApplication {
         SpringApplication.run(BookerOrderServiceApplication.class, args);
     }
 
-//	@Bean
-//	public CommandLineRunner demo(OrderRepository orderRepository, OrderStatusRepository orderStatusRepository) {
-//		return (args) -> {
-//
-//		};
-//	}
 }

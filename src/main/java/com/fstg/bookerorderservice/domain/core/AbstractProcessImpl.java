@@ -2,6 +2,7 @@ package com.fstg.bookerorderservice.domain.core;
 
 public abstract class AbstractProcessImpl<T extends AbstractProcessInput> {
 
+
     public Result execute(T abstractProcessInput) {
         Result result = new Result();
         if (validateProcess(abstractProcessInput, result)) {

@@ -1,16 +1,9 @@
 package com.fstg.bookerorderservice.domain.pojo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fstg.bookerorderservice.application.dto.OrderStatusDto;
-import com.fstg.bookerorderservice.infra.entity.OrderItemEntity;
-import com.fstg.bookerorderservice.infra.entity.OrderStatusEntity;
-import lombok.Data;
-
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+
 public class CustomerOrder {
     private Long id;
     private String ref;
@@ -20,8 +13,17 @@ public class CustomerOrder {
     private String sellerRef;
     private String buyerRef;
     private BigDecimal orderAmount;
+    private BigDecimal totalPaid;
     private OrderStatus status;
     private List<OrderItem> orderItems;
+
+    public BigDecimal getTotalPaid() {
+        return totalPaid;
+    }
+
+    public void setTotalPaid(BigDecimal totalPaid) {
+        this.totalPaid = totalPaid;
+    }
 
     public Long getId() {
         return id;

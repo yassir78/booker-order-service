@@ -4,12 +4,14 @@ import com.fstg.bookerorderservice.domain.core.AbstractProcessImpl;
 import com.fstg.bookerorderservice.domain.core.Result;
 import com.fstg.bookerorderservice.domain.pojo.CustomerOrder;
 import com.fstg.bookerorderservice.domain.pojo.OrderItem;
-import com.fstg.bookerorderservice.domain.pojo.Payment;
+import com.fstg.bookerorderservice.domain.pojo.OrderStatus;
+import com.fstg.bookerorderservice.infra.entity.enums.Status;
 import com.fstg.bookerorderservice.infra.facade.CustomerOrderInfra;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class CustomerOrderCreateProcessImpl extends AbstractProcessImpl<CustomerOrderCreateInput> implements CustomerOrderCreateProcess {
@@ -40,25 +42,29 @@ public class CustomerOrderCreateProcessImpl extends AbstractProcessImpl<Customer
     @Override
     public void run(CustomerOrderCreateInput abstractProcessInput, Result result) {
         CustomerOrder customerOrder = abstractProcessInput.getCustomerOrder();
-        int status = customerOrderInfra.save(customerOrder);
-        
-        result.addInfoMessage("The Order has been saved " + status);
-        
+        customerOrder.setStatus(createOrderStatus(Status.UNPAID));
+        customerOrderInfra.save(customerOrder);
+        result.addInfoMessage(customerOrderInfra.getMessage("commande.status.saved"));
         logger.info("Order saved successfully");
-        
-        //Payment Process
-        
-        customerOrderInfra.pay(new Payment(null,"#ORDR563", customerOrder.getOrderAmount().doubleValue(), customerOrder.getRef()));
-        
-        
-        
-        
+
+        //Payment
+        logger.info("Payment proccess started");
+        String reference = UUID.randomUUID().toString();
+        customerOrderInfra.pay(reference, customerOrder.getOrderAmount(), customerOrder.getRef());
+        logger.info("Payment proccess finished");
+        result.addInfoMessage(customerOrderInfra.getMessage("commande.payment.saved"));
+
     }
 
     public CustomerOrderCreateProcessImpl(CustomerOrderInfra customerOrderInfra) {
         this.customerOrderInfra = customerOrderInfra;
     }
 
+    private OrderStatus createOrderStatus(Status status) {
+        OrderStatus orderStatus = new OrderStatus();
+        orderStatus.setStatus(status.toString());
+        return orderStatus;
+    }
 
     private void validateOrderItems(List<OrderItem> orderItems, Result result) {
         if (Objects.isNull(orderItems)) {

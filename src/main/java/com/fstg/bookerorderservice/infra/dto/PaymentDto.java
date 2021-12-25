@@ -17,6 +17,10 @@ public class PaymentDto {
     private String reference;
     private double amount;
     private String orderReference;
-    
-    
+
+    public PaymentDto(String reference, double amount, String orderReference) {
+        this.reference = reference;
+        this.amount = amount;
+        this.orderReference = orderReference;
+    }
 }

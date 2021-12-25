@@ -10,6 +10,6 @@ public class OrderItemDto {
     private Long id;
     private Integer quantity;
     private BigDecimal total;
-    private Long productRef;
+    private String productRef;
     private CustomerOrderDto relatedCustomerOrderDto;
 }
