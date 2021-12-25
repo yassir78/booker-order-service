@@ -25,6 +25,7 @@ public class CustomerOrderCreateProcessImpl extends AbstractProcessImpl<Customer
         if (customerOrder.getId() != null) {
             result.addErrorMessage(customerOrderInfra.getMessage("commande.paiment.not_founded"));
         } else {
+            logger.info("customerOrder " + abstractProcessInput.getCustomerOrder().toString());
             if (!customerOrderInfra.userExistsByRef(abstractProcessInput.getCustomerOrder().getSellerRef())) {
                 result.addErrorMessage(customerOrderInfra.getMessage("commande.seller.not_founded"));
             }

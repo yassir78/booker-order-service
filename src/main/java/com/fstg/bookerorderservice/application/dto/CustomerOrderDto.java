@@ -1,6 +1,5 @@
 package com.fstg.bookerorderservice.application.dto;
 
-import com.fstg.bookerorderservice.infra.entity.OrderStatusEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;

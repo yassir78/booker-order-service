@@ -18,6 +18,7 @@ public class CustomerOrderMapper extends AbstractConverter<CustomerOrderEntity, 
 
     @Override
     public CustomerOrder entityToPojo(CustomerOrderEntity entity) {
+        System.out.println("entityToPojo :  " + entity.toString());
         CustomerOrder customerOrder = new CustomerOrder();
         customerOrder.setId(entity.getId());
         customerOrder.setOrderAmount(entity.getOrderAmount());
@@ -30,6 +31,7 @@ public class CustomerOrderMapper extends AbstractConverter<CustomerOrderEntity, 
         customerOrder.setRef(entity.getRef());
         customerOrder.setOrderItems(orderItemMapper.entitiesToPojos(entity.getOrderItems()));
         customerOrder.setStatus(orderStatusMapper.entityToPojo(entity.getStatus()));
+        System.out.println("entityToPojo :  " + customerOrder.toString());
         return customerOrder;
     }
 
@@ -62,10 +64,13 @@ public class CustomerOrderMapper extends AbstractConverter<CustomerOrderEntity, 
         customerOrder.setShipToAddress(dto.getShipToAddress());
         customerOrder.setShipToDate(dto.getShipToDate());
         customerOrder.setRef(dto.getRef());
+        System.out.println("dtoToPojo :  " + customerOrder.toString());
         customerOrder.setOrderItems(orderItemMapper.dtosToPojos(dto.getOrderItemDtos()));
-        if(dto.getStatus() != null){
+        if (dto.getStatus() != null) {
             customerOrder.setStatus(orderStatusMapper.dtoToPojo(dto.getStatus()));
         }
+        System.out.println("dtoToPojo :  " + customerOrder.toString());
+
         return customerOrder;
     }
 
@@ -89,10 +94,11 @@ public class CustomerOrderMapper extends AbstractConverter<CustomerOrderEntity, 
     public CustomerOrderCreateInput dtoToCreateInput(CustomerOrderDto dto) {
         System.out.println("dtoToCreateInput mapper");
         CustomerOrderCreateInput customerOrderCreateInput = new CustomerOrderCreateInput();
-        CustomerOrder customerOrder = dtoToPojo(dto);
+        CustomerOrder customerOrder = this.dtoToPojo(dto);
         System.out.println("dtoToCreateInput mapper customerOrder: " + customerOrder);
         customerOrderCreateInput.setCustomerOrder(customerOrder);
         customerOrderCreateInput.setRef(dto.getRef());
+        System.out.println("i'm done with dtoToCreateInput mapper");
         return customerOrderCreateInput;
     }
 

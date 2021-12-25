@@ -40,7 +40,13 @@ public class CustomOrderInfraImpl extends AbstractInfraImpl implements CustomerO
     @Override
     public CustomerOrder findByReference(String reference) {
         Optional<CustomerOrderEntity> customerOrderEntity = customerOrderRepository.findByRef(reference);
-        return customerOrderEntity.isPresent() ? customerOrderMapper.entityToPojo(customerOrderEntity.get()) : new CustomerOrder();
+        System.out.println("find by reference check if found or not " + customerOrderEntity.isPresent());
+        if (customerOrderEntity.isPresent()) {
+            System.out.println("find by reference check if found  " + customerOrderEntity.get());
+            return customerOrderMapper.entityToPojo(customerOrderEntity.get());
+        } else {
+            return new CustomerOrder();
+        }
     }
 
     @Override

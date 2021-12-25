@@ -27,6 +27,7 @@ public class CustomerOrderRest {
 
     @PostMapping("/")
     public ResponseEntity<Result> create(@RequestBody CustomerOrderDto customerOrderDto) {
+        System.out.println("**************REst Dto Display: " + customerOrderDto.toString());
         Result result = customerOrderCreateProcess.execute(customerOrderMapper.dtoToCreateInput(customerOrderDto));
         System.out.println("**************CreateInput: " + customerOrderMapper.dtoToCreateInput(customerOrderDto));
         return new ResponseEntity<>(result, HttpStatus.CREATED);
@@ -34,6 +35,7 @@ public class CustomerOrderRest {
 
     @PutMapping("/")
     public ResponseEntity<Result> update(@RequestBody CustomerOrderDto customerOrderDto) {
+        System.out.println("Update method: " + customerOrderDto.toString());
         Result result = customerOrderUpdateProcess.execute(customerOrderMapper.dtoToUpdateInput(customerOrderDto));
         System.out.println(customerOrderMapper.dtoToUpdateInput(customerOrderDto));
         return new ResponseEntity<>(result, HttpStatus.OK);
@@ -46,8 +48,10 @@ public class CustomerOrderRest {
 
     @GetMapping("/ref/{ref}")
     public CustomerOrder findByReference(@PathVariable String ref) {
-        System.out.println("**************REFE: " + ref);
-        return customerOrderInfra.findByReference(ref);
+        System.out.println("**************find By reference rest: " + ref);
+        CustomerOrder customerOrder = customerOrderInfra.findByReference(ref);
+        System.out.println("**************find By reference rest: re" + customerOrder);
+        return customerOrder;
     }
 
 }
