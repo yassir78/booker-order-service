@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 @Component
 public class CustomOrderInfraImpl extends AbstractInfraImpl implements CustomerOrderInfra {
@@ -39,11 +38,9 @@ public class CustomOrderInfraImpl extends AbstractInfraImpl implements CustomerO
 
     @Override
     public CustomerOrder findByReference(String reference) {
-        Optional<CustomerOrderEntity> customerOrderEntity = customerOrderRepository.findByRef(reference);
-        System.out.println("find by reference check if found or not " + customerOrderEntity.isPresent());
-        if (customerOrderEntity.isPresent()) {
-            System.out.println("find by reference check if found  " + customerOrderEntity.get());
-            return customerOrderMapper.entityToPojo(customerOrderEntity.get());
+        CustomerOrderEntity customerOrderEntity = customerOrderRepository.findByRef(reference);
+        if (customerOrderEntity != null) {
+            return customerOrderMapper.entityToPojo(customerOrderEntity);
         } else {
             return new CustomerOrder();
         }
@@ -83,7 +80,7 @@ public class CustomOrderInfraImpl extends AbstractInfraImpl implements CustomerO
 
     @Override
     public void pay(String ref, BigDecimal amount, String customerOrderRef) {
-        PaymentDto paymentDto = new PaymentDto(ref, amount.doubleValue(), customerOrderRef);
+        PaymentDto paymentDto = new PaymentDto(ref, amount, customerOrderRef);
         paymentProxy.pay(paymentDto);
     }
 

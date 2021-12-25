@@ -9,8 +9,8 @@ import java.math.BigDecimal;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Data
+@Getter
+@Setter
 public class OrderItemEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

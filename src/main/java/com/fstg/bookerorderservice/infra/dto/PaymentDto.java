@@ -15,10 +15,10 @@ import lombok.ToString;
 public class PaymentDto {
     private Long id;
     private String reference;
-    private double amount;
+    private BigDecimal amount;
     private String orderReference;
 
-    public PaymentDto(String reference, double amount, String orderReference) {
+    public PaymentDto(String reference, BigDecimal amount, String orderReference) {
         this.reference = reference;
         this.amount = amount;
         this.orderReference = orderReference;
