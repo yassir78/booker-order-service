@@ -8,11 +8,14 @@ import java.math.BigDecimal;
 public interface CustomerOrderInfra extends AbstractInfra {
     CustomerOrder findByReference(String reference);
 
+    void sendEmail(CustomerOrder customerOrder);
+
     int deleteByReference(String reference);
 
     void update(CustomerOrder customerOrder);
 
     void save(CustomerOrder customerOrder);
+
     boolean userExistsByRef(String ref);
 
     boolean productExistsByRef(String ref);

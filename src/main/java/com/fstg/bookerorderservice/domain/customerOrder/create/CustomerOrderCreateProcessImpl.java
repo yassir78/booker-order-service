@@ -46,6 +46,8 @@ public class CustomerOrderCreateProcessImpl extends AbstractProcessImpl<Customer
         customerOrder.setStatus(createOrderStatus(Status.UNPAID));
         customerOrderInfra.save(customerOrder);
         result.addInfoMessage(customerOrderInfra.getMessage("commande.status.saved"));
+        //send email to buyer
+        customerOrderInfra.sendEmail(customerOrder);
         //Payment
         logger.info("Payment proccess started");
         String reference = UUID.randomUUID().toString();

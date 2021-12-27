@@ -1,6 +1,8 @@
 package com.fstg.bookerorderservice.infra.impl;
 
+import com.fstg.bookerorderservice.application.dto.CustomerOrderDto;
 import com.fstg.bookerorderservice.domain.pojo.CustomerOrder;
+import com.fstg.bookerorderservice.infra.config.SendMessage;
 import com.fstg.bookerorderservice.infra.core.AbstractInfraImpl;
 import com.fstg.bookerorderservice.infra.dao.CustomerOrderRepository;
 import com.fstg.bookerorderservice.infra.dao.OrderItemRepository;
@@ -12,29 +14,29 @@ import com.fstg.bookerorderservice.infra.mappers.CustomerOrderMapper;
 import com.fstg.bookerorderservice.infra.proxy.PaymentProxy;
 import com.fstg.bookerorderservice.infra.proxy.ProductProxy;
 import com.fstg.bookerorderservice.infra.proxy.UserProxy;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
 @Component
+@RequiredArgsConstructor
 public class CustomOrderInfraImpl extends AbstractInfraImpl implements CustomerOrderInfra {
-    @Autowired
-    private CustomerOrderRepository customerOrderRepository;
-    @Autowired
-    private CustomerOrderMapper customerOrderMapper;
-    @Autowired
-    private OrderItemRepository orderItemRepository;
-    @Autowired
-    private OrderStatusRepository orderStatusRepository;
-    @Autowired
-    private UserProxy userProxy;
-    @Autowired
-    private ProductProxy productProxy;
-
-    @Autowired
-    private PaymentProxy paymentProxy;
+    private final CustomerOrderRepository customerOrderRepository;
+    private final CustomerOrderMapper customerOrderMapper;
+    private final OrderItemRepository orderItemRepository;
+    private final OrderStatusRepository orderStatusRepository;
+    private final UserProxy userProxy;
+    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ProductProxy productProxy;
+    private final SendMessage sendMessage;
+    private final PaymentProxy paymentProxy;
+    @Value(value = "${kafka.order-topic}")
+    private String orderTopic;
 
     @Override
     public CustomerOrder findByReference(String reference) {
@@ -44,6 +46,13 @@ public class CustomOrderInfraImpl extends AbstractInfraImpl implements CustomerO
         } else {
             return new CustomerOrder();
         }
+    }
+
+    @Override
+    public void sendEmail(CustomerOrder customerOrder) {
+        CustomerOrderDto customerOrderDto = customerOrderMapper.pojoToDto(customerOrder);
+        // send kafka message
+        this.kafkaTemplate.send(orderTopic, sendMessage.buildMessage(customerOrderDto));
     }
 
     @Override
