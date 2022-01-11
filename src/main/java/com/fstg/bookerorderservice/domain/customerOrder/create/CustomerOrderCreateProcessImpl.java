@@ -8,6 +8,7 @@ import com.fstg.bookerorderservice.domain.pojo.OrderStatus;
 import com.fstg.bookerorderservice.infra.entity.enums.Status;
 import com.fstg.bookerorderservice.infra.facade.CustomerOrderInfra;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -44,10 +45,11 @@ public class CustomerOrderCreateProcessImpl extends AbstractProcessImpl<Customer
     public void run(CustomerOrderCreateInput abstractProcessInput, Result result) {
         CustomerOrder customerOrder = abstractProcessInput.getCustomerOrder();
         customerOrder.setStatus(createOrderStatus(Status.UNPAID));
+        customerOrder.setTotalPaid(BigDecimal.ZERO);
         customerOrderInfra.save(customerOrder);
         result.addInfoMessage(customerOrderInfra.getMessage("commande.status.saved"));
         //send email to buyer
-        customerOrderInfra.sendEmail(customerOrder);
+        //customerOrderInfra.sendEmail(customerOrder);
         //Payment
         logger.info("Payment proccess started");
         String reference = UUID.randomUUID().toString();

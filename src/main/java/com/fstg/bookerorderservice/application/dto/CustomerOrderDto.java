@@ -16,7 +16,6 @@ public class CustomerOrderDto {
     private String sellerRef;
     private String buyerRef;
     private BigDecimal orderAmount;
-    private BigDecimal totalPaid;
     private OrderStatusDto status;
     private List<OrderItemDto> orderItemDtos;
 }

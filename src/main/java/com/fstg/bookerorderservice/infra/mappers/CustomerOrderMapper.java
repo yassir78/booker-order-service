@@ -39,7 +39,6 @@ public class CustomerOrderMapper extends AbstractConverter<CustomerOrderEntity, 
         customerOrderDto.setId(pojo.getId());
         customerOrderDto.setOrderAmount(pojo.getOrderAmount());
         customerOrderDto.setOrderDate(pojo.getOrderDate());
-        customerOrderDto.setTotalPaid(pojo.getTotalPaid());
         customerOrderDto.setBuyerRef(pojo.getBuyerRef());
         customerOrderDto.setSellerRef(pojo.getSellerRef());
         customerOrderDto.setShipToAddress(pojo.getShipToAddress());
@@ -56,7 +55,6 @@ public class CustomerOrderMapper extends AbstractConverter<CustomerOrderEntity, 
         customerOrder.setId(dto.getId());
         customerOrder.setOrderAmount(dto.getOrderAmount());
         customerOrder.setOrderDate(dto.getOrderDate());
-        customerOrder.setTotalPaid(dto.getTotalPaid());
         customerOrder.setBuyerRef(dto.getBuyerRef());
         customerOrder.setSellerRef(dto.getSellerRef());
         customerOrder.setShipToAddress(dto.getShipToAddress());

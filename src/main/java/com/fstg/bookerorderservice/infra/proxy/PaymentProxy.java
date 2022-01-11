@@ -1,7 +1,7 @@
 package com.fstg.bookerorderservice.infra.proxy;
 
 import com.fstg.bookerorderservice.domain.core.Result;
-import com.fstg.bookerorderservice.infra.dto.PaymentDto;
+import com.fstg.bookerorderservice.application.dto.PaymentDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

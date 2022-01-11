@@ -1,4 +1,4 @@
-package com.fstg.bookerorderservice.infra.dto;
+package com.fstg.bookerorderservice.application.dto;
 
 
 import java.math.BigDecimal;

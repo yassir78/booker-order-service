@@ -27,7 +27,7 @@ public class CustomerOrderUpdateProcessImpl extends AbstractProcessImpl<Customer
     @Override
     public void run(CustomerOrderUpdateInput abstractProcessInput, Result result) {
         // Run
-        customerOrder.setTotalPaid(abstractProcessInput.getCustomerOrder().getTotalPaid());
+        customerOrder.setTotalPaid(customerOrder.getTotalPaid().add(abstractProcessInput.getCustomerOrder().getOrderAmount()));
         customerOrder.setOrderAmount(abstractProcessInput.getCustomerOrder().getOrderAmount());
         customerOrder.setStatus(createOrderStatus(Status.PAID));
         customerOrderInfra.update(customerOrder);
@@ -43,7 +43,7 @@ public class CustomerOrderUpdateProcessImpl extends AbstractProcessImpl<Customer
 
     private void validateCustomerOrderAmount(CustomerOrderUpdateInput abstractProcessInput, Result result) {
         CustomerOrder inputCustomerOrder = abstractProcessInput.getCustomerOrder();
-        if (inputCustomerOrder.getOrderAmount().compareTo(inputCustomerOrder.getTotalPaid()) > 0) {
+        if (inputCustomerOrder.getOrderAmount().compareTo(customerOrder.getTotalPaid()) < 0) {
             result.addErrorMessage(customerOrderInfra.getMessage("commande.paiment.amount.not_founded"));
         }
     }

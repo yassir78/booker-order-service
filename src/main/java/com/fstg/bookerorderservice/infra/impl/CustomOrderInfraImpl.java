@@ -1,13 +1,13 @@
 package com.fstg.bookerorderservice.infra.impl;
 
 import com.fstg.bookerorderservice.application.dto.CustomerOrderDto;
+import com.fstg.bookerorderservice.application.dto.PaymentDto;
 import com.fstg.bookerorderservice.domain.pojo.CustomerOrder;
 import com.fstg.bookerorderservice.infra.config.SendMessage;
 import com.fstg.bookerorderservice.infra.core.AbstractInfraImpl;
 import com.fstg.bookerorderservice.infra.dao.CustomerOrderRepository;
 import com.fstg.bookerorderservice.infra.dao.OrderItemRepository;
 import com.fstg.bookerorderservice.infra.dao.OrderStatusRepository;
-import com.fstg.bookerorderservice.infra.dto.PaymentDto;
 import com.fstg.bookerorderservice.infra.entity.CustomerOrderEntity;
 import com.fstg.bookerorderservice.infra.facade.CustomerOrderInfra;
 import com.fstg.bookerorderservice.infra.mappers.CustomerOrderMapper;
@@ -15,7 +15,6 @@ import com.fstg.bookerorderservice.infra.proxy.PaymentProxy;
 import com.fstg.bookerorderservice.infra.proxy.ProductProxy;
 import com.fstg.bookerorderservice.infra.proxy.UserProxy;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
@@ -37,11 +36,14 @@ public class CustomOrderInfraImpl extends AbstractInfraImpl implements CustomerO
     private final PaymentProxy paymentProxy;
     @Value(value = "${kafka.order-topic}")
     private String orderTopic;
+    @Value(value = "${kafka.pay-order-topic}")
+    private String payOrderTopic;
 
     @Override
     public CustomerOrder findByReference(String reference) {
         CustomerOrderEntity customerOrderEntity = customerOrderRepository.findByRef(reference);
         if (customerOrderEntity != null) {
+            System.out.println("zzzz " + customerOrderMapper.entityToPojo(customerOrderEntity).toString());
             return customerOrderMapper.entityToPojo(customerOrderEntity);
         } else {
             return new CustomerOrder();
@@ -90,7 +92,9 @@ public class CustomOrderInfraImpl extends AbstractInfraImpl implements CustomerO
     @Override
     public void pay(String ref, BigDecimal amount, String customerOrderRef) {
         PaymentDto paymentDto = new PaymentDto(ref, amount, customerOrderRef);
-        paymentProxy.pay(paymentDto);
+        System.out.println("sent payment to kafka" + sendMessage.buildMessage(paymentDto));
+        this.kafkaTemplate.send(payOrderTopic, sendMessage.buildMessage(paymentDto));
+        // paymentProxy.pay(paymentDto);
     }
 
 

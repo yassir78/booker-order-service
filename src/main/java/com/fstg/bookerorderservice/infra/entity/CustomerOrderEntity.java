@@ -29,6 +29,6 @@ public class CustomerOrderEntity {
     private BigDecimal totalPaid;
     @ManyToOne
     private OrderStatusEntity status;
-    @OneToMany(mappedBy = "relatedCustomerOrder")
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "relatedCustomerOrder")
     private List<OrderItemEntity> orderItems;
 }
